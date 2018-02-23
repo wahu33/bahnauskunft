@@ -10,7 +10,7 @@
 
   //echo "DEBUG: ".$bhf."   ".$ibnr."   ".$bhf; exit;
   $numTime = ($numHour>=0) ? strtotime('midnight')+$numHour*3600 : $numTime=time();
-  $zuege = $bahn->getTimetable($ibnr, $numTime) ;
+  $zuege = $bahn->getTimetable($ibnr, $numTime);
 
   echo "<div id='header'>";
   echo "<form name='auswahl' action='$strUrl' method='post'>";
@@ -36,7 +36,7 @@
   echo "</form>\n";
   echo "</div>\n";
   // Ende Header --------------------------
-
+  echo "<tbody>";
   echo "<table id='abfahrttafel'  class='display'>\n".
             "<thead>".
             "<tr><th>Zug</th><th>Geplante Abfahrt</th>
@@ -80,7 +80,7 @@
               $numDelay=-1;
           }
           elseif(isset($zug['abfahrt']['zeitAktuell'])) {
-              echo "<td class='change nowrap'>".date("H:i",$numAbfahrtAktuell) ."</td>";
+              echo "<td class='change nowrap'>".date("H:i", $numAbfahrtAktuell) ."</td>";
           }
           else {
               echo "<td></td>";
@@ -93,7 +93,7 @@
           }
           elseif ($numDelay>=5) {
             echo "<td class='red'></i> +".$numDelay."</td>";
-          }
+          } 
           elseif ($numDelay<0) {
             echo "<td></td>";
           }
@@ -105,9 +105,9 @@
           echo "<td>".$zug['abfahrt']['gleisGeplant']."</td>";
 
           // Gleis aktuell -----------
-          if(isset($zug['abfahrt']['gleisAktuell'])){
+          if (isset($zug['abfahrt']['gleisAktuell'])){
               echo "<td class='change'>".$zug['abfahrt']['gleisAktuell']."</td>";
-          }else{
+          } else {
                echo "<td></td>";
           }
           echo "<td>".$ziel."</td>";
@@ -118,3 +118,4 @@
       }
   }
   echo "</table>\n";
+  echo "</tbody>\n";

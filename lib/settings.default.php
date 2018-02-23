@@ -14,4 +14,7 @@ $arrStations = array ('8000149'=>'Hamm',
                       '8000085'=>'Düsseldorf',
                       '8003680'=>'Limburg');
 
+$strSender = "user@example.com";
+$strCarbonCopy = "user@example.com";
+
 date_default_timezone_set("Europe/Berlin");

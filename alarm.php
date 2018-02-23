@@ -54,7 +54,7 @@
         $arrZug = explode("_",$strZug);
         $strZug = $arrZug[0];
         $strDeparture = $arrZug[1];
-        //Erst mal schauen, ob er Zug schon eingetragen ist.
+        //Erst mal schauen, ob der Zug schon eingetragen ist.
         $strSQL = "SELECT id FROM tableAlarm WHERE email='$strEmail'
                                 AND zug='$strZug' AND station='$strStation'";
         $result=$db->query($strSQL);
@@ -72,14 +72,14 @@
         $boolOk = true;
         $bahn = new phpbahn(SETTING_APIKEY);
         //Bahnhofsnummer muss nicht jedesmal ermittelt werden
-        //Wird in per Hand in settings.php eingetragen
+        //Wird per Hand in settings.php eingetragen
         //$bhf = $bahn->getStation($strStation) ;
         //reset($bhf);
         //$ibnr = key($bhf);
         //$bhf = array_shift($bhf);
         $time = strtotime('midnight')+$numHour*3600;
         $zuege = $bahn->getTimetable($strIbnr, $time );
-        if(!count($zuege)){	echo "keine Verbindungen";}
+        if (!count($zuege)) { echo "keine Verbindungen"; }
     }
 
     // Eintrag für Teilnehmer löschen
@@ -130,12 +130,12 @@
                 echo "<div class='row'>";
                 $strZiel = array_pop($zug['abfahrt']['routeGeplant']);
                 $timeAbfahrt = $bahn->dateToTimestamp($zug['abfahrt']['zeitGeplant']);
-                $strAbfahrt = date("H:i",$timeAbfahrt);
+                $strAbfahrt = date("H:i", $timeAbfahrt);
                 $strBahnValue = $zug['zug']['klasse'].$zug['zug']['nummer']."_".$strAbfahrt;
                 $strBahnAnzeige =
-                      $zug['zug']['klasse']." ".$zug['zug']['nummer']."</div>".
-                     "<div class='col-2'>" . $strAbfahrt . "</div>".
-                     "<div class='col-6'>" . $strZiel  . "</div>";
+                    $zug['zug']['klasse']." ".$zug['zug']['nummer']."</div>".
+                    "<div class='col-2'>" . $strAbfahrt . "</div>".
+                    "<div class='col-6'>" . $strZiel  . "</div>";
 
                 echo "<div class='col-4'>&nbsp;&nbsp;&nbsp;<input type='checkbox' name='zug[]' class='form-check-input' value='$strBahnValue'> ";
                 echo $strBahnAnzeige;

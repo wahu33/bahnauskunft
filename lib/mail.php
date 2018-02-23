@@ -1,5 +1,9 @@
 <?php
+
 function alertmail($strEmail,$strText) {
+    global $strSender;
+    global $strCarbonCopy;
+
     $to = $strEmail;
     $subject = "Bahn-Alert";
 
@@ -12,9 +16,9 @@ function alertmail($strEmail,$strText) {
     $headers .= "Content-type:text/html;charset=UTF-8" . "\r\n";
 
     // More headers
-    $headers .= 'From: <user@beispiel.de>' . "\r\n";
-    $headers .= 'Cc: userr@beispiel.de' . "\r\n";
+    $headers .= "From: ".$strSender . "\r\n";
+    $headers .= "Cc: ".$strCarbonCopy . "\r\n";
 
-    mail($to,$subject,$message,$headers);
+    mail($to, $subject, $message, $headers);
 }
 ?>

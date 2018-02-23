@@ -40,30 +40,31 @@ while ($row=$result->fetchArray()) {
             array_push($arrZuege,$row3['zug']);
         }
         // Jetzt über die aktuelle Stunde und die nächste Stunde iterieren
-        for ($numStunde=0;$numStunde<=1;$numStunde++) {
+         for ($numStunde=0;$numStunde<=1;$numStunde++) {
             $numZeit = time() + $numStunde*3600;
             $zuege = $bahn->getTimetable($strIbnr,$numZeit);
             if(!count($zuege)){	echo "keine Verbindungen"; }
             //DEBUG:  print_r($arrZuege);echo "<hr>";
 
-            foreach($zuege as $zug){
+            foreach ($zuege as $zug) {
               	$zugname = $zug['zug']['klasse'].$zug['zug']['nummer'];
-              	//echo $zugname."<br>\n";
-                //print_r($arrZuege);echo "<hr>";
-              	if(in_array($zugname, $arrZuege) AND isset($zug['abfahrt']) ) {
-                    $timeAbfahrt=$bahn->dateToTimestamp($zug['abfahrt']['zeitGeplant']);
-                    $strAbfahrt=date("H:i",$timeAbfahrt);
+              	if (in_array($zugname, $arrZuege) AND isset($zug['abfahrt']) ) {
+                    $timeAbfahrt = $bahn->dateToTimestamp($zug['abfahrt']['zeitGeplant']);
+                    $strAbfahrt = date("H:i", $timeAbfahrt);
                     $strStation = $arrStations[$strIbnr];
                 		if(!isset($zug['abfahrt']['zeitAktuell'])){
                 			$verspaetung = 0;
-                		}else{
-                			$verspaetung = $bahn->dateToTimestamp($zug['abfahrt']['zeitAktuell'])-$bahn->dateToTimestamp($zug['abfahrt']['zeitGeplant']);
-                      $strMailText.="$zugname hat ". ($verspaetung/60) . " Minuten Verspätung ab $strStation.\r\n";
+                		} else {
+                      $numZeitAktuell = $bahn->dateToTimestamp($zug['abfahrt']['zeitAktuell']);
+                      $numZeitGeplant = $bahn->dateToTimestamp($zug['abfahrt']['zeitGeplant']);
+                			$verspaetung = $numZeitAktuell - $numZeitGeplant;
+                      $strMailText.=$zugname." mit Abfahrtszeit ". date("H:i", $numZeitGeplant);
+                      $strMailText.=" Uhr hat ". ($verspaetung/60) . " Minuten Verspätung ab $strStation.\r\n";
                 		}
                     if ($verspaetung>$maxVerspaetung) $maxVerspaetung=$verspaetung;
 
                     $strSQL="insert into verspaetungen (zeit,station,zug,verspaetung,email,abfahrt)
-                                      values (datetime(),'$strStation','$zugname','$verspaetung','$strEmail','$strAbfahrt')";
+                              values (datetime(),'$strStation','$zugname','$verspaetung','$strEmail','$strAbfahrt')";
                     $db->exec($strSQL);
                     //  echo "DEBUG: ".$strSQL."<br>\n";
               	}
